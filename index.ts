@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import scrapEvent from './src/scrapEvent'
+import scrapeEvent from './src/scrapeEvent'
 import jwt from 'jsonwebtoken'
 import { response } from './common/response'
 import cors from 'cors'
@@ -35,7 +35,7 @@ app.post('/createNewUser', async (req, res) => {
 
 app.post('/odds', authenticateToken, async (req, res) => {
   try {
-    const data = await scrapEvent(req.body.url)
+    const data = await scrapeEvent(req.body.url)
     res.send(response(200, data))
   } catch (e) {
     console.log('e', e)

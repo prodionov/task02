@@ -37,12 +37,12 @@ const validateUrl = (url: string) => {
   }
 }
 
-const scrapEvent = async (url: string) => {
+const scrapeEvent = async (url: string) => {
   await validateUrl(url)
 
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
-  page.setJavaScriptEnabled(false)
+  page.setJavaScriptEnabled(!(url === 'localFile'))
   await page.goto(url === 'localFile' ? localFileUrl : url)
 
   const title = await page.title()
@@ -91,4 +91,4 @@ const scrapEvent = async (url: string) => {
   return horsesInformation
 }
 
-export default scrapEvent
+export default scrapeEvent

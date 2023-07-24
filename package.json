@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "node ./build/index.js",
-    "dev": "ts-node ./src/scrapEvent.ts",
+    "dev": "ts-node src/scrapeEvent.ts",
     "local": "nodemon index.ts",
     "test": "jest --verbose ./"
   },
