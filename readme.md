@@ -17,7 +17,9 @@ Local development: ```npm run local```
 In order to use the endpoint you need to create a user and get a token. That can be done sending a POST request to /createNewUser with the following body:</p>
 
 ```javascript
-    curl -X GET http://localhost:3000/createNewUser
+    curl -X POST http://localhost:3000/createNewUser \
+        -H 'Content-Type: application/json' \
+        -d '{"username": "testUser"}'
 ```
 In response you will receive a token that you can use to access the endpoint /odds.
 The token can be added in Postman or in curl request as a header:
@@ -35,8 +37,7 @@ Curl example:
     curl -H 'Content-Type: application/json' \ 
         -H "Authorization: Bearer <insert your token>" \
         -d '{"url": "https://m.skybet.com/horse-racing/newbury/event/31896647"}' \
-        -X POST \
-        http://localhost:3000/scrapOdds
+        -X POST http://localhost:3000/odds
 
 ```
 
