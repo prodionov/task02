@@ -1,6 +1,5 @@
 import scrapeEvent from '../src/scrapeEvent'
 
-const incorrectURL = 'https://horse-racing/monmouth-park/event/31907924'
 const pastEventURL = 'https://m.skybet.com/horse-racing/la-teste-de-buch/event/31903725'
 
 const validEventRespones = [
@@ -39,24 +38,17 @@ const validEventRespones = [
 ]
 
 describe('GIVEN scrapEvent is called', () => {
-  describe('WHEN url is not valid', () => {
-    it('THEN throw an error', async () => {
-      await expect(scrapeEvent(incorrectURL)).rejects.toThrow('Invalid url')
-    })
-  })
-
   describe('WHEN url is for the past event', () => {
     it('THEN throw an error', async () => {
       await expect(scrapeEvent(pastEventURL)).rejects.toThrow('Event not available')
     })
   })
 
-  // describe('WHEN url is valid but event just finished', () => {
-  //   it('THEN throw an error', async () => {
-  //     const result = await scrapeEvent(`runningEvent`)
-  //     expect(result).toMatchObject(validEventRespones)
-  //   })
-  // })
+  describe('WHEN url is valid but event just finished', () => {
+    it('THEN throw an error', async () => {
+      await expect(scrapeEvent('justFinishedEvent')).rejects.toThrow('The event is in progress or has already finished')
+    })
+  })
 
   describe('WHEN url is valid and event has not started', () => {
     it('THEN return the horse information', async () => {

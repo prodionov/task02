@@ -41,11 +41,10 @@ const scrapeEvent = async (url: string) => {
 
   // As on each run we start a new browser instance, we always have to accept cookies
   const cookiesButtonQuery = `button[id="onetrust-accept-btn-handler"]`
-  console.log('we cannot find the button')
   await page.waitForSelector(cookiesButtonQuery)
   const cookiesButton = await page.$(cookiesButtonQuery)
   await cookiesButton!.evaluate((el) => el.click())
-  console.log('we are here')
+
   // Check that the event has not started yet by checking if there is a <section class="market">
   // Potentially that can be improved by comparing the current time with the start time of the event
   // So we don't have to wait for the result
