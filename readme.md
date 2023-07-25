@@ -63,12 +63,14 @@ to test and develop fast, they are easy to get and implement. Fewer hits to the 
 One thing to consider is how to detect that the website 
 has changed and that the scraping mechanism should be updated accordingly</p>
 
-3. <p>On scalability, there are things to consider: whether we want to hit a particular event frequently and spot that odds were changed.
+3. <p>On scalability, there are things to consider: whether we want to hit a particular event frequently and spot that odds were changed
+or collect information about large number of events.
 There are not that many horse racing events taking place simultaneously, so potentially it is the former we are after. It would be 
 good to bypass the 'Accept cookies' button (there are suggestions online to use particular headers for that). Then we can scrape 
 events in parallel. By and large it depends on business requirements.</p>
 
-4. <p>Things to improve: Error messages currently do not return status codes, more test coverage and load testing.</p>
+4. <p>Things to improve: Error messages currently do not return status codes, more test coverage, load testing and 
+api automation testing are needed.</p>
 
 
 
