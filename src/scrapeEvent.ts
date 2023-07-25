@@ -16,6 +16,10 @@ const localFileUrlMap = {
   justFinishedEvent: `file://${__dirname}/../__fixture__/justFinishedEvent.html`,
 }
 
+const horsesInformationQuery = `div:has(> button[aria-label^="Horse name"])`
+const horseNameQuery = `div[aria-label^="Horse name"]`
+const oddsQuery = `div[aria-label*="Add to bet slip"] > span > span`
+
 const validatePageTitle = async (title: string, browser: Browser) => {
   if (title === ErrorEnum.EVENT_NOT_AVAILABLE) {
     await browser.close()
@@ -28,11 +32,12 @@ const validatePageTitle = async (title: string, browser: Browser) => {
 }
 
 const scrapeEvent = async (eventUrl: string) => {
+  // I have omitted the validation of the eventUrl as it is done by schema validation in the API
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
 
   const isLocalTesting = eventTypes.includes(eventUrl)
-  page.setJavaScriptEnabled(!isLocalTesting)
+  await page.setJavaScriptEnabled(!isLocalTesting)
   await page.goto(isLocalTesting ? localFileUrlMap[eventUrl as keyof typeof localFileUrlMap] : eventUrl)
 
   const title = await page.title()
@@ -44,9 +49,8 @@ const scrapeEvent = async (eventUrl: string) => {
   const cookiesButton = await page.$(cookiesButtonQuery)
   await cookiesButton!.evaluate((el) => el.click())
 
-  // Check that the event has not started yet by checking if there is a <section class="market">
-  // Potentially that can be improved by comparing the current time with the start time of the event
-  // So we don't have to wait for the result
+  // Check that the event has not finished yet by checking if there is a <section class="market">
+  // That contains the results table
   const marketNodeQuery = `section[class="markets"]`
   const marketNode = await page.$(marketNodeQuery)
   if (marketNode) {
@@ -54,9 +58,6 @@ const scrapeEvent = async (eventUrl: string) => {
     throw new Error('The event is in progress or has already finished')
   }
 
-  const horsesInformationQuery = `div:has(> button[aria-label^="Horse name"])`
-  const horseNameQuery = `div[aria-label^="Horse name"]`
-  const oddsQuery = `div[aria-label*="Add to bet slip"] > span > span`
   await page.waitForSelector(horseNameQuery)
 
   const horsesInformation: HorseInformation[] = await page.$$eval(
@@ -75,8 +76,6 @@ const scrapeEvent = async (eventUrl: string) => {
 
   await browser.close()
 
-  // Response does not include horses that are not running in the event.
-  // We can filter them out as there would be a requirement for that.
   return horsesInformation
 }
 
