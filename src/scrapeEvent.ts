@@ -16,10 +16,6 @@ const localFileUrlMap = {
   justFinishedEvent: `file://${__dirname}/../__fixture__/justFinishedEvent.html`,
 }
 
-const horsesInformationQuery = `div:has(> button[aria-label^="Horse name"])`
-const horseNameQuery = `div[aria-label^="Horse name"]`
-const oddsQuery = `div[aria-label*="Add to bet slip"] > span > span`
-
 const validatePageTitle = async (title: string, browser: Browser) => {
   if (title === ErrorEnum.EVENT_NOT_AVAILABLE) {
     await browser.close()
@@ -58,6 +54,9 @@ const scrapeEvent = async (eventUrl: string) => {
     throw new Error('The event is in progress or has already finished')
   }
 
+  const horsesInformationQuery = `div:has(> button[aria-label^="Horse name"])`
+  const horseNameQuery = `div[aria-label^="Horse name"]`
+  const oddsQuery = `div[aria-label*="Add to bet slip"] > span > span`
   await page.waitForSelector(horseNameQuery)
 
   const horsesInformation: HorseInformation[] = await page.$$eval(
