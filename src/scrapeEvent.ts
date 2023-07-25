@@ -40,6 +40,8 @@ const scrapeEvent = async (eventUrl: string) => {
   await validatePageTitle(title, browser)
 
   // As on each run we start a new browser instance, we always have to accept cookies
+  // Potentially, in the future if we scrape multiple events in the same run
+  // We could work with multiple pages in the same browser instance and only accept cookies once
   const cookiesButtonQuery = `button[id="onetrust-accept-btn-handler"]`
   await page.waitForSelector(cookiesButtonQuery)
   const cookiesButton = await page.$(cookiesButtonQuery)
