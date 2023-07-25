@@ -3,13 +3,19 @@ import bodyParser from 'body-parser'
 import scrapeEvent from './src/scrapeEvent'
 import jwt from 'jsonwebtoken'
 import { response } from './common/response'
+import Ajv from 'ajv'
 import cors from 'cors'
 require('dotenv').config()
 
 const app = express()
 const PORT = 3000
+
 app.use(bodyParser.json())
 app.use(cors())
+
+const ajv = new Ajv()
+const postOddSchema = require('./src/schemas/post-odds-request-schema.json')
+const validateOddsRequest = ajv.compile(postOddSchema)
 
 function authenticateToken(req: Request, res: Response, next: any) {
   const authHeader = req.headers['authorization']
@@ -35,11 +41,19 @@ app.post('/createNewUser', async (req, res) => {
 
 app.post('/odds', authenticateToken, async (req, res) => {
   try {
-    const data = await scrapeEvent(req.body.url)
+    const { url } = req.body
+    console.log('req.body', req.body)
+    if (!validateOddsRequest(req.body)) {
+      console.log(validateOddsRequest.errors)
+      throw new Error('Invalid request')
+    }
+    const data = await scrapeEvent(url)
     res.send(response(200, data))
   } catch (e) {
     console.log('e', e)
-    res.send(e)
+    // TODO introduce proper error handling
+    // @ts-ignore
+    res.send(e.toString())
   }
 })
 

@@ -39,7 +39,6 @@ const validEventRespones = [
 ]
 
 describe('GIVEN scrapEvent is called', () => {
-  afterEach(() => {})
   describe('WHEN url is not valid', () => {
     it('THEN throw an error', async () => {
       await expect(scrapeEvent(incorrectURL)).rejects.toThrow('Invalid url')
@@ -52,9 +51,16 @@ describe('GIVEN scrapEvent is called', () => {
     })
   })
 
-  describe('WHEN url is valid', () => {
+  // describe('WHEN url is valid but event just finished', () => {
+  //   it('THEN throw an error', async () => {
+  //     const result = await scrapeEvent(`runningEvent`)
+  //     expect(result).toMatchObject(validEventRespones)
+  //   })
+  // })
+
+  describe('WHEN url is valid and event has not started', () => {
     it('THEN return the horse information', async () => {
-      const result = await scrapeEvent(`localFile`)
+      const result = await scrapeEvent(`upcomingEvent`)
       expect(result).toMatchObject(validEventRespones)
     })
   })

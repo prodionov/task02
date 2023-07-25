@@ -10,8 +10,12 @@ interface HorseInformation {
   odds: string | null
 }
 
-const localFileUrl = `file://${__dirname}/../__fixture__/page.html`
-const urlRegex = new RegExp('^https:\\/\\/m\\.skybet\\.com\\/horse-racing\\/.*\\/event\\/\\d+$')
+const eventTypes = ['upcomingEvent', 'justFinishedEvent', 'runningEvent']
+const localFileUrlMap = {
+  upcomingEvent: `file://${__dirname}/../__fixture__/upcomingEvent.html`,
+  justFinishedEvent: `file://${__dirname}/../__fixture__/justFinishedEvent.html`,
+  runningEvent: `file://${__dirname}/../__fixture__/runningEvent.html`,
+}
 
 const validatePageTitle = async (title: string, browser: Browser) => {
   if (title === ErrorEnum.EVENT_NOT_AVAILABLE) {
@@ -24,37 +28,24 @@ const validatePageTitle = async (title: string, browser: Browser) => {
   }
 }
 
-const validateUrl = (url: string) => {
-  // For testing purposes
-  if (url === 'localFile') {
-    return
-  }
-  if (!url) {
-    throw new Error('Url is required')
-  }
-  if (!urlRegex.test(url)) {
-    throw new Error('Invalid url')
-  }
-}
-
 const scrapeEvent = async (url: string) => {
-  await validateUrl(url)
-
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
-  page.setJavaScriptEnabled(!(url === 'localFile'))
-  await page.goto(url === 'localFile' ? localFileUrl : url)
+
+  const isLocalTesting = eventTypes.includes(url)
+  page.setJavaScriptEnabled(!isLocalTesting)
+  await page.goto(isLocalTesting ? localFileUrlMap[url as keyof typeof localFileUrlMap] : url)
 
   const title = await page.title()
   await validatePageTitle(title, browser)
 
   // As on each run we start a new browser instance, we always have to accept cookies
   const cookiesButtonQuery = `button[id="onetrust-accept-btn-handler"]`
-
+  console.log('we cannot find the button')
   await page.waitForSelector(cookiesButtonQuery)
   const cookiesButton = await page.$(cookiesButtonQuery)
   await cookiesButton!.evaluate((el) => el.click())
-
+  console.log('we are here')
   // Check that the event has not started yet by checking if there is a <section class="market">
   // Potentially that can be improved by comparing the current time with the start time of the event
   // So we don't have to wait for the result

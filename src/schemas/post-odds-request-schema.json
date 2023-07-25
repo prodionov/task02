@@ -1,0 +1,12 @@
+{
+  "title": "Post odds request schema",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["url"],
+  "properties": {
+    "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/m\\.skybet\\.com\\/horse-racing\\/.*\\/event\\/\\d+$"
+    }
+  }
+}
