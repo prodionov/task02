@@ -1,7 +1,7 @@
 ## Quick start:
 Download and install nodejs 16.14.x @ http://nodejs.org/download/
 
-```cd whiteSwanData\```\
+```cd task02\```\
 Install dependencies: 
 ```npm install```
 
@@ -34,11 +34,10 @@ The project is built for skybet and the event url has the following format: "htt
 **Request**
 Curl example:
 ```javascript
-    curl -H 'Content-Type: application/json' \ 
+    curl -H 'Content-Type: application/json' \
         -H "Authorization: Bearer <insert your token>" \
         -d '{"eventUrl": "https://m.skybet.com/horse-racing/newbury/event/31896647"}' \
         -X POST http://localhost:3000/odds
-
 ```
 
 **Response**
