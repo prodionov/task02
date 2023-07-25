@@ -10,11 +10,10 @@ interface HorseInformation {
   odds: string | null
 }
 
-const eventTypes = ['upcomingEvent', 'justFinishedEvent', 'runningEvent']
+const eventTypes = ['upcomingEvent', 'justFinishedEvent']
 const localFileUrlMap = {
   upcomingEvent: `file://${__dirname}/../__fixture__/upcomingEvent.html`,
   justFinishedEvent: `file://${__dirname}/../__fixture__/justFinishedEvent.html`,
-  runningEvent: `file://${__dirname}/../__fixture__/runningEvent.html`,
 }
 
 const validatePageTitle = async (title: string, browser: Browser) => {
@@ -28,13 +27,13 @@ const validatePageTitle = async (title: string, browser: Browser) => {
   }
 }
 
-const scrapeEvent = async (url: string) => {
+const scrapeEvent = async (eventUrl: string) => {
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
 
-  const isLocalTesting = eventTypes.includes(url)
+  const isLocalTesting = eventTypes.includes(eventUrl)
   page.setJavaScriptEnabled(!isLocalTesting)
-  await page.goto(isLocalTesting ? localFileUrlMap[url as keyof typeof localFileUrlMap] : url)
+  await page.goto(isLocalTesting ? localFileUrlMap[eventUrl as keyof typeof localFileUrlMap] : eventUrl)
 
   const title = await page.title()
   await validatePageTitle(title, browser)

@@ -41,13 +41,11 @@ app.post('/createNewUser', async (req, res) => {
 
 app.post('/odds', authenticateToken, async (req, res) => {
   try {
-    const { url } = req.body
-    console.log('req.body', req.body)
+    const { eventUrl } = req.body
     if (!validateOddsRequest(req.body)) {
-      console.log(validateOddsRequest.errors)
       throw new Error('Invalid request')
     }
-    const data = await scrapeEvent(url)
+    const data = await scrapeEvent(eventUrl)
     res.send(response(200, data))
   } catch (e) {
     console.log('e', e)

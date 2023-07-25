@@ -36,7 +36,7 @@ Curl example:
 ```javascript
     curl -H 'Content-Type: application/json' \ 
         -H "Authorization: Bearer <insert your token>" \
-        -d '{"url": "https://m.skybet.com/horse-racing/newbury/event/31896647"}' \
+        -d '{"eventUrl": "https://m.skybet.com/horse-racing/newbury/event/31896647"}' \
         -X POST http://localhost:3000/odds
 
 ```
